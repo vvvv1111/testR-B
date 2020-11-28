@@ -16,7 +16,8 @@ protocol isPageLoadedDelegate {
 class WebViewController: UIViewController, WKNavigationDelegate, isPageLoadedDelegate {
     
     let webView = WKWebView()
-    
+    var firstLoad = true
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view = webView
@@ -24,8 +25,16 @@ class WebViewController: UIViewController, WKNavigationDelegate, isPageLoadedDel
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        openLoadPage()
+        if firstLoad == true{
+            openLoadPage()
+            firstLoad = false
+        }
     }
+    
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+                print("no connection")
+    }
+    
     
     func webView(_ webView: WKWebView,
                  didFinish navigation: WKNavigation!) {
@@ -45,6 +54,5 @@ class WebViewController: UIViewController, WKNavigationDelegate, isPageLoadedDel
         vc.delegate = self
         self.present(vc, animated: true)
     }
-    
-    
+
 }
